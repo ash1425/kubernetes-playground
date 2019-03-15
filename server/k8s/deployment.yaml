@@ -5,7 +5,7 @@ metadata:
   labels:
     app: server
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: server
@@ -68,4 +68,4 @@ metadata:
   name: mongo
 spec:
   type: ExternalName
-  externalName: 192.168.65.1
+  externalName: host.docker.internal
