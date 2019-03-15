@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  labels:
+    app: client
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+        - name: client
+          image: client:v1
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8081
+          readinessProbe:
+            timeoutSeconds: 1
+            periodSeconds: 1
+            failureThreshold: 5
+            initialDelaySeconds: 10
+            httpGet:
+              port: 8081
+              path: /
+          livenessProbe:
+            timeoutSeconds: 1
+            periodSeconds: 1
+            failureThreshold: 5
+            initialDelaySeconds: 10
+            httpGet:
+              port: 8081
+              path: /
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
