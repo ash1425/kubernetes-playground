@@ -1,71 +1,34 @@
-apiVersion: apps/v1
+apiVersion: v1
+kind: Service
+metadata:
+  name: users
+  labels:
+    app: users
+spec:
+  ports:
+    - name: http
+      port: 8080
+  selector:
+    app: users
+---
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: server
-  labels:
-    app: server
+  name: users
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: server
+  replicas: 2
   template:
     metadata:
       labels:
-        app: server
+        app: users
+        version: v1
     spec:
       containers:
-        - name: server
-          image: server:v3
+        - image: users:v1
           imagePullPolicy: Never
+          name: users
           ports:
             - containerPort: 8080
           env:
             - name: MONGO_HOST
-              value: mongo
-          readinessProbe:
-            timeoutSeconds: 1
-            periodSeconds: 1
-            failureThreshold: 5
-            initialDelaySeconds: 10
-            httpGet:
-              port: 8080
-              path: /
-          livenessProbe:
-            timeoutSeconds: 1
-            periodSeconds: 1
-            failureThreshold: 5
-            initialDelaySeconds: 10
-            httpGet:
-              port: 8080
-              path: /
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1
-
----
-
-apiVersion: v1
-kind: Service
-metadata:
-  name: server-service
-  labels:
-    app: server
-spec:
-  selector:
-    app: server
-  type: LoadBalancer
-  ports:
-    - port: 8080
-
----
-
-kind: Service
-apiVersion: v1
-metadata:
-  name: mongo
-spec:
-  type: ExternalName
-  externalName: host.docker.internal
+              value: 192.168.65.2

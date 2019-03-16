@@ -1,43 +1,31 @@
-apiVersion: apps/v1
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  labels:
+    app: httpbin
+spec:
+  ports:
+    - name: http
+      port: 8081
+  selector:
+    app: httpbin
+---
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: client
-  labels:
-    app: client
+  name: httpbin
 spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: client
+  replicas: 1
   template:
     metadata:
       labels:
-        app: client
+        app: httpbin
+        version: v1
     spec:
       containers:
-        - name: client
-          image: client:v1
+        - image: client:v2
           imagePullPolicy: Never
+          name: httpbin
           ports:
             - containerPort: 8081
-          readinessProbe:
-            timeoutSeconds: 1
-            periodSeconds: 1
-            failureThreshold: 5
-            initialDelaySeconds: 10
-            httpGet:
-              port: 8081
-              path: /
-          livenessProbe:
-            timeoutSeconds: 1
-            periodSeconds: 1
-            failureThreshold: 5
-            initialDelaySeconds: 10
-            httpGet:
-              port: 8081
-              path: /
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 1
-      maxSurge: 1

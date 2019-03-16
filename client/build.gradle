@@ -10,7 +10,7 @@ apply plugin: 'com.palantir.docker'
 sourceCompatibility = '1.8'
 
 docker {
-    name "client:v1"
+    name "client:v2"
     files bootJar.archivePath
     buildArgs(['JAR_FILE': "${bootJar.archiveName}"])
 }

@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: ServiceEntry
+metadata:
+  name: mongo
+spec:
+  hosts:
+    - host.docker.internal
+  addresses:
+    - 192.168.65.2/32
+  ports:
+    - name: mongoport
+      number: 27017
+      protocol: MONGO
+  location: MESH_EXTERNAL
