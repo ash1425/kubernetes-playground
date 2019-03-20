@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: users:ae8b81eb5f2ca3769550a5d18b3c4ec6d52869c9
+          image: users:build
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
