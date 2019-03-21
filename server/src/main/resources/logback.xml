@@ -6,7 +6,6 @@
             <fieldNames>
                 <timestamp>application_timestamp</timestamp>
                 <version>[ignore]</version>
-                <stackTrace>[ignore]</stackTrace>
                 <levelValue>[ignore]</levelValue>
             </fieldNames>
         </encoder>

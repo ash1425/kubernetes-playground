@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -37,10 +38,13 @@ public class PersonController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> savePerson(@RequestBody Person person) {
+    public ResponseEntity<Void> savePerson(@RequestBody Person person, UriComponentsBuilder uriContext) {
         log.info("saving person : {}", person);
         Person saved = personRepository.save(person);
 
-        return ResponseEntity.created(URI.create("/people/" + saved.getName())).build();
+        URI location = uriContext.path("/people/{id}")
+                .buildAndExpand(saved.getId())
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 }
