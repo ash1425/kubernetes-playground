@@ -43,8 +43,8 @@ spec:
     spec:
       containers:
         - name: users
-          image: localhost:5000/users@sha256:50dd517d5a4228931aa3ec1ce8c803b4d97c19c0126dd0915daa65d712d63486
-          imagePullPolicy: IfNotPresent
+          image: localhost:5000/users:DEV
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
               name: http
@@ -57,7 +57,7 @@ spec:
             failureThreshold: 5
             initialDelaySeconds: 20
             httpGet:
-              port: 8080
+              port: http
               path: /actuator/health
           livenessProbe:
             timeoutSeconds: 10
@@ -65,7 +65,7 @@ spec:
             failureThreshold: 5
             initialDelaySeconds: 20
             httpGet:
-              port: 8080
+              port: http
               path: /actuator/health      
   strategy:
     type: RollingUpdate
