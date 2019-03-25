@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,9 +10,8 @@ spec:
     app: users
   type: LoadBalancer
   ports:
-    - port: 80
-      targetPort: http
-
+  - port: 80
+    targetPort: http
 ---
 
 kind: Service
@@ -21,8 +21,6 @@ metadata:
 spec:
   type: ExternalName
   externalName: host.docker.internal
-
-
 ---
 
 apiVersion: apps/v1
@@ -31,6 +29,8 @@ metadata:
   name: users
   labels:
     app: users
+  annotations:
+    flux.weave.works/automated: 'true'
 spec:
   replicas: 1
   selector:
@@ -39,34 +39,34 @@ spec:
   template:
     metadata:
       labels:
-        app: users      
+        app: users
     spec:
       containers:
-        - name: users
-          image: localhost:5000/users:DEV
-          imagePullPolicy: Always
-          ports:
-            - containerPort: 8080
-              name: http
-          env:
-            - name: MONGO_HOST
-              value: mongo-host
-          readinessProbe:
-            timeoutSeconds: 10
-            periodSeconds: 10
-            failureThreshold: 5
-            initialDelaySeconds: 20
-            httpGet:
-              port: http
-              path: /actuator/health
-          livenessProbe:
-            timeoutSeconds: 10
-            periodSeconds: 10
-            failureThreshold: 5
-            initialDelaySeconds: 20
-            httpGet:
-              port: http
-              path: /actuator/health      
+      - name: users
+        image: localhost:5000/users:DEV
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: MONGO_HOST
+          value: mongo-host
+        readinessProbe:
+          timeoutSeconds: 10
+          periodSeconds: 10
+          failureThreshold: 5
+          initialDelaySeconds: 20
+          httpGet:
+            port: http
+            path: /actuator/health
+        livenessProbe:
+          timeoutSeconds: 10
+          periodSeconds: 10
+          failureThreshold: 5
+          initialDelaySeconds: 20
+          httpGet:
+            port: http
+            path: /actuator/health
   strategy:
     type: RollingUpdate
     rollingUpdate:
