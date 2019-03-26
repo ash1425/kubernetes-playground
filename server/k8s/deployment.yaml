@@ -11,9 +11,7 @@ spec:
   ports:
     - port: 80
       targetPort: http
-
 ---
-
 kind: Service
 apiVersion: v1
 metadata:
@@ -21,10 +19,7 @@ metadata:
 spec:
   type: ExternalName
   externalName: host.docker.internal
-
-
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,7 +27,7 @@ metadata:
   labels:
     app: users
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: users
@@ -43,7 +38,7 @@ spec:
     spec:
       containers:
         - name: users
-          image: localhost:5000/users:DEV
+          image: ash1425/users:DEV
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -51,6 +46,16 @@ spec:
           env:
             - name: MONGO_HOST
               value: mongo-host
+            - name: DD_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: datadog-secrets
+                  key: api-key  
+            - name: DD_APP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: datadog-secrets
+                  key: app-key      
           readinessProbe:
             timeoutSeconds: 10
             periodSeconds: 10
@@ -66,7 +71,7 @@ spec:
             initialDelaySeconds: 20
             httpGet:
               port: http
-              path: /actuator/health      
+              path: /actuator/health    
   strategy:
     type: RollingUpdate
     rollingUpdate:
