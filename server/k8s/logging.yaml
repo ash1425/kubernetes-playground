@@ -15,7 +15,7 @@ spec:
     app: es-app
   ports:
   - port: 9200
-    targetPort: 9200
+    targetPort: es-http
 
 ---
 apiVersion: apps/v1
@@ -38,6 +38,7 @@ spec:
         image: docker.elastic.co/elasticsearch/elasticsearch:6.6.2
         ports:
         - containerPort: 9200
+          name: es-http
         env:
           - name: discovery.type
             value: single-node
@@ -55,7 +56,7 @@ spec:
   type: LoadBalancer  
   ports:
   - port: 5601
-    targetPort: 5601
+    targetPort: kibana-http
 
 ---
 apiVersion: apps/v1
@@ -78,6 +79,7 @@ spec:
         image: docker.elastic.co/kibana/kibana:6.6.2
         ports:
         - containerPort: 5601
+          name: kibana-http
         env:
           - name: ELASTICSEARCH_URL
             value: http://elasticsearch:9200
