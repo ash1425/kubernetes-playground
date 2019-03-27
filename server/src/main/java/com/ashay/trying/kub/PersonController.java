@@ -24,7 +24,7 @@ public class PersonController {
 
     @GetMapping
     public List<Person> getAll() {
-        log.info("Getting all people");
+        log.info("Getting all people from mongodb");
         return personRepository.findAll();
     }
 

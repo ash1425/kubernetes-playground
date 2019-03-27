@@ -1,0 +1,10 @@
+apiVersion: skaffold/v1beta7
+kind: Config
+build:
+  artifacts:
+  - image: ash1425/users
+    jibGradle: {}
+deploy:
+    kubectl:
+      manifests:
+        - k8s/deployment.yaml

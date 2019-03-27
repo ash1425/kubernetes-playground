@@ -1,3 +1,13 @@
+kind: SealedSecret
+apiVersion: bitnami.com/v1alpha1
+metadata:
+  name: datadog-secrets
+  namespace: default
+spec:
+  encryptedData:
+    api-key: AgCyyESoZTDXyqHrVF3xFkdTO7Rt6VcM4jXDU9o5NqyT/P9s3LLukszv+Mjs/WW26HIk8WD9Hefheeb43YBCCSKeiI2FV4RuOV8j03AWG2KiPMmhBPOOvt1Yi6YzW8+tSR9wSIKBesabCNk0oBzRWrC+KYLP1LtaVXfwkx62sUKqAS58iVxKVX/70oUiE/itPHxuSv9g40yXJ3UmXcBe8lSsvsQp8fd8tzBchGlbsqYcyAqyLXpeLYl7XPvwkXuNOubVDAWObLNDk5M3DAadPxGBn22Dyws4GuR48P3Af2LRXOK6O2oHWGgveTrUCucqv2ZklGby+gOmYHGa41i7VPkOr0ay86DxWrG20I5ODchZSusW7YHHnkJNC4wtEnDNzJCVO+BpZCG2zAQ0mnSCUL5jvDOTCfEiDwHJ4MypIAZ4Rhaa5wRnUKdQXjVcADPFMGwiJFU/+snJaC5ytO+pc+V8xA17PL7AgI48Kx3IQyymEIVteKHVTHaj9j1k/Qalb1Gm12ik8dPoOJBix7s5c+egKx7WJbpFLs/JjCHmNzd2iYFodrsvCpw/8no8ma9bs0FngXqbIcOCswPDYbVs9NnqKnqrL9W+gGuOZOX3o4d57Dp2vJ6Bfpq296ZEATEADhKzG4RSAEHoOZskXB0LN0aqs631EoqVy/wOgVrkPIglOt0Xus7aZCXShp3xf8m0wo1jJcl/gTfxRKIX1UpczJwQjFMaIJspKmwj8TtX3W/dYA==
+    app-key: AgATTqKAtvfg56yShR7sLB/CBN45VTrM7tFwEdCCYq41Jfe7QAqyBLqZfN/iyjSV1JMPLaT4os9hDZcf25Kr0J9Dzj0nLBWHmeO4Er073Ty/hQ3XlH0InnQputmMddwZRQnr/q6PCzMri1MzAKXFQOvkjzHVydNBOQgsjJgTddBzRhYP+bFoBe4BkK73r93ZdjalZ3oET8Rd1kIfZSigtGhl5MwbHx/MLJEgfjljNnC/IjwpoQUJcUqLziW6F/J0PB7j7Bl70wNDcdUmSIFXqAs+RxR5NAGDwfI7pVzF5WqNnQpPGHUDpk2YTj5ZGbKTV9i74Dvhy+YKI+ALJBjV3Kn8vCMRxbidHBc2+SxJya1TJqvw7taR484RiE1n00PRnZUxArJgD0km2uJXrRflj4aFG6vZIIKYwbJkZAuvPX/YNdZxZKnUpzbQxMMlU/P6iofpuq65GZOSBsoktXjN4/NBxvxKdob56YuRmClCIgf1j6WTOUjJKgvl/CLDXyACDal7QOuWrSW1yz2TOpHnL/fJ4uuA22lYvWvoTmL8tfYjfFbSX37ycgU4WsuftWQyqVU9D5sEMWaz2oIvihWIdNlXQWYijPCEdPkODrGuuqwSmqyB2t3YQZIJ5k/5d37C5t5Y2wKuOe+mFDxFCEEvO9g/aRQa7g7KQMQJECyeBClMfBoJ6u2vqlZmMDbeoMEDzdPwDwPd4CCV5yfqiXV4jrULmskvrLDF1omK4cSy1949liTOgF4voQgC
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -27,7 +37,7 @@ metadata:
   labels:
     app: users
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: users
@@ -38,8 +48,8 @@ spec:
     spec:
       containers:
         - name: users
-          image: ash1425/users:DEV
-          imagePullPolicy: Always
+          image: ash1425/users
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
               name: http

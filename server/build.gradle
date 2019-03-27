@@ -19,8 +19,7 @@ def getGitHash = { ->
 
 jib {
     to {
-        image = "ash1425/users:DEV"
-        tags = [getGitHash()]
+        image = "ash1425/users"
     }
     container {
         labels = ['gitCommit': getGitHash()]
