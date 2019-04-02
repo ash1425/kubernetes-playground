@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-patcher
+spec:
+  selector:
+    matchLabels:
+      app: deployment-patcher
+  template:
+    metadata:
+      labels:
+        app: deployment-patcher
+    spec:
+      containers:
+      - name: deployment-patcher
+        image: ash1425/deployment_patcher:v1
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+          name: http
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: deployment-patcher-service
+spec:
+  selector:
+    app: deployment-patcher
+  type: LoadBalancer  
+  loadBalancerIP: 104.198.46.4
+  ports:
+  - port: 81
+    targetPort: http
+          
